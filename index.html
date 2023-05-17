@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>Map Maker</title>
+        <link href="style.css" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <div id="container">
+            <div id="loading">
+                <h1 id="loading_text">Loading...</h1>
+            </div>
+        </div>
+        <header id="header">
+            <span class="icon">Map Maker</span>
+            <span id="resetCamera">Reset Camera</span>
+            <span id="import">Import</span>
+            <span id="export">Export</span>
+            <span id="help">Help</span>
+        </header>
+        <div id="importdiv" style="display: none;">
+            <h1 style="color: white">Import: </h1>
+            <textarea id="importText" resize="none"></textarea>
+            <button id="saveimport">Load</button>
+        </div>
+        <div id="exportdiv" style="display: none;">
+            <h1 style="color: white">Export: </h1>
+            <button id="downloadallblocks">Copy Map</button>
+        </div>
+        <div id="helpdiv" style="display: none;">
+            <p style="color: white" id="helptext">
+                <span style="color: aqua">WASD:</span>
+                Move camera <br>
+                <span style="color: cyan">Shift:</span>
+                Increase camera speed <br>
+                <span style="color: skyblue">Space:</span>
+                Toggle Select Mode <br>
+                <span style="color: cyan">Left Click:</span>
+                Place Object <br>
+                <span style="color: skyblue">Left Click (Select Mode):</span>
+                Select Object <br>
+                <span style="color: aqua">Backspace:</span>
+                Delete any selected object<br>
+                <span style="color: skyblue">Enter:</span>
+                Copy map to clipboard<br>
+            
+            </p>
+        </div>
+        <canvas id="canvas" width=1600 height=900 style="z-index: 1"></canvas>
+
+        <div class="tools-lay">
+            <p class="edit-head">Tools</p>
+            <p class="edit-subhead">Object Properties</p>
+            <div id="sel-div" style="display: none;">
+                <div class="exit-field">
+                    <span>Background</span>
+                    <input type="color">
+                </div>
+                <div class="exit-field">
+                    <span>Smt Else</span>
+                    <input type="range">
+                </div>
+            </div>
+            <div id="nosel-div" class="exit-field">
+                <span>Nothing Selected</span>
+            </div>
+            <p class="edit-subhead">Entities</p>
+            <div id="obj-div" class="exit-field" style="column-count: 2; column-gap: 0px;" >
+                <button id="0">Room</button>
+                <!-- <button id="1">Start</button> -->
+                <button id="1">Spawn</button>
+                <button id="2" class="selected">Block</button>
+                <!-- <button id="4">Lava</button>
+                <button id="5">Crawler</button>
+                <button id="12">Darkness Block</button> -->
+            </div>
+            <p class="edit-subhead">Triggers</p>
+            <div id="trig-div" class="exit-field" style="column-count: 2; column-gap: 0px;">
+                <!-- <button id="6">Help Text</button>
+                <button id="7">Move</button>
+                <button id="8">Cutscene</button>
+                <button id="9">Scale</button>
+                <button id="10">Opacity</button>
+                <button id="11">Light</button>
+                <button id="13">Cam Offset</button> -->
+            </div>
+        </div>
+        <script src="setup.js"></script>
+        <script src="helpfulFuncs.js"></script>
+        <script src="popup.js"></script>
+        <script src="objects/alterableProperties.js"></script>
+        <script src="objects/room.js"></script>
+        <script src="objects/entities.js"></script>
+        <script src="objects/createObjects.js"></script>
+        <script src="map/map.js"></script>
+        <script src="map/loadMap.js"></script>
+        <script src="script.js"></script>
+    </body>
+</html>

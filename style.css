@@ -1,0 +1,277 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap'); 
+
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: rgba(12,12,12,1);
+    font-size: 16px;
+    font-family: PT Sans, sans-serif;
+    text-align: center;
+}
+
+canvas {
+    background-color: rgba(10,10,10,1);
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.blocks {
+    position: fixed;
+    background: rgba(128, 128, 128, 0.5);
+    width: 100%;
+    bottom: 0;
+    z-index: 2;
+}
+
+.icon {
+    position: absolute;
+    left: 0;
+    transition: all 0.5s linear;
+}
+
+header {
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 5.75vh;
+    background: linear-gradient(217deg, rgba(255,0,0,.8), rgba(255,0,0,0) 70.71%),
+            linear-gradient(127deg, rgba(0,195,0,.8), rgba(0,255,0,0) 70.71%),
+            linear-gradient(336deg, rgba(0,0,255,.8), rgba(0,0,255,0) 70.71%);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 3.4vh;
+}
+
+header span {
+    /*font-size: 4%;*/
+    color: white;
+    margin: 15px;
+    cursor: pointer;
+    padding: 0px;
+    height: 100%;
+    transition: all 0.3s linear;
+}
+
+.tools-lay{
+	background-color: #444;
+	border: solid 2px #555;
+	position: fixed;
+	top: 7vh;
+	right: 10px;
+	width: 300px;
+	bottom: 10px;
+    overflow: auto;
+    z-index: 3;
+}
+
+.act-mode-lay{
+	width: 100%;
+	display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: center;
+	/* background-color: #444; */
+	padding: 5px 0 5px 0;
+	border-bottom: solid 2px #555;
+}
+
+.edit-head{
+    color: black;
+    font-weight: bold;
+	text-align: center;
+    width: 100%;
+    margin: 0;
+	border-bottom: solid 2px #666;
+    font-size: 20pt;
+    text-decoration: underline;
+}
+
+edit-head > p {
+    text-align: left;
+}
+
+.edit-subhead {
+    color: green;
+    font-weight: bold;
+    text-align: center;
+    width: 100%;
+    margin: 0;
+	border-bottom: ridge #666;
+    font-size: 15pt;
+    text-shadow: 1px 1px 2px black, 0 0 80px white, 0 0 5px black;
+}
+
+.edit-head > button{
+	float: right;
+}
+
+.edit-layout{
+	border-bottom: solid 2px #777;
+}
+
+.exit-field{
+	contain: layout;
+    padding: 2px 2px 2px 2px;
+    border-bottom: solid 2px #777;
+    text-align: left;
+}
+
+.exit-field > button {
+    width: 100%;
+}
+
+.exit-field > span {
+    left: 0;
+}
+
+.exit-field:nth-child(2n) {
+    background-color: rgba(0, 0, 0, 0.158);
+}
+
+.exit-field > option,
+.exit-field > select,
+.exit-field > input{
+	float: right;
+}
+
+.exit-field > textarea{
+	float: right;
+	width: 98%;
+	resize: vertical;
+}
+
+input {
+	padding: 0;
+    background-color: transparent;
+    border: 0;
+	height: 30px;
+    margin: -4px 0 -4px 0;
+    width: 50%;
+}
+
+input[type="number"] {
+    margin: 4px 0 4px 0;
+    height: 20px;
+    text-align: center;
+    background-color: white;
+}
+
+input[type="text"] {
+    margin: 4px 0 4px 0;
+    height: 20px;
+    text-align: center;
+    background-color: white;
+}
+
+input[type="checkbox"] {
+    margin: 4px 0 4px 0;
+    height: 75%;
+    text-align: center;
+    background-color: white;
+}
+
+#nosel-div {
+    text-align: center;
+}
+
+.buttons {
+    font-family: PT Sans, Helvetica, Sans-Serif;
+    font-size: 25px;
+    width: fit-content;
+    height: 40px;
+    transition: all 1s ease;
+    outline: none;
+    cursor: pointer;
+    margin: 4px;
+    border-radius: 6px;
+    border: 3px solid rgb(10, 10, 10);
+    color: black;
+    -webkit-text-fill-color: white;
+    /* Will override color (regardless of order) */
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+}
+
+.selected {
+    background: #0f0;
+}
+
+.button {
+    cursor: pointer;
+}
+
+.fadeout {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s 0.75s, opacity 0.75s linear;
+}
+
+.fadein {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.75s linear;
+}
+
+#container {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes load {
+    100% {
+        filter: blur(2px);
+        letter-spacing: 1px;
+    }
+}
+
+#loading {
+    background: radial-gradient(#9b59b6aa, #9933FFbb);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    animation: load 1.2s infinite 0s ease-in-out;
+    animation-direction: alternate;
+    z-index: 100;
+}
+
+#loading #loading_text {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-shadow: 0 0 6px black;
+    color: white;
+    font-size: 25px;
+    z-index: 1;
+    text-align: center;
+}
+
+#importdiv, #exportdiv, #helpdiv {
+    display: flex;
+    background: black;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 3px solid green;
+    z-index: 30;
+    padding: 10px;
+}
