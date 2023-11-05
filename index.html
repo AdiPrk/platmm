@@ -30,21 +30,14 @@
         </div>
         <div id="helpdiv" style="display: none;">
             <p style="color: white" id="helptext">
-                <span style="color: aqua">WASD:</span>
-                Move camera <br>
-                <span style="color: cyan">Shift:</span>
-                Increase camera speed <br>
-                <span style="color: skyblue">Space:</span>
-                Toggle Select Mode <br>
-                <span style="color: cyan">Left Click:</span>
-                Place Object <br>
-                <span style="color: skyblue">Left Click (Select Mode):</span>
-                Select Object <br>
-                <span style="color: aqua">Backspace:</span>
-                Delete any selected object<br>
-                <span style="color: skyblue">Enter:</span>
-                Copy map to clipboard<br>
-            
+                <span style="color: aqua">WASD:</span> Move camera
+                <br><span style="color: cyan">Shift:</span> Increase camera speed
+                <br><span style="color: skyblue">Space:</span> Toggle select Mode
+                <br><span style="color: cyan">Left Click:</span> Place/select Object
+                <br><span style="color: aqua">Backspace:</span> Delete selected object
+                <br><span style="color: skyblue">Enter:</span> Copy map to clipboard
+                <br><span style="color: cyan">Plus/Minus:</span> Change grid granularity
+                <br><span style="color: skyblue">Arrows/Shift/JK:</span> Change selected object transform
             </p>
         </div>
         <canvas id="canvas" width=1600 height=900 style="z-index: 1"></canvas>
@@ -68,23 +61,33 @@
             <p class="edit-subhead">Entities</p>
             <div id="obj-div" class="exit-field" style="column-count: 2; column-gap: 0px;" >
                 <button id="0">Room</button>
-                <!-- <button id="1">Start</button> -->
-                <button id="1">Spawn</button>
-                <button id="2" class="selected">Block</button>
-                <!-- <button id="4">Lava</button>
-                <button id="5">Crawler</button>
-                <button id="12">Darkness Block</button> -->
+                <button id="1">Start</button>
+                <button id="2">Spawn</button>
+                <button id="3" class="selected">Block</button>
+                <button id="4">Lava</button>
+                <button id="5">Safe Zone</button>
+                <button id="12">Darkness Block</button>
+                <button id="15">Swinging Block</button>
             </div>
             <p class="edit-subhead">Triggers</p>
             <div id="trig-div" class="exit-field" style="column-count: 2; column-gap: 0px;">
-                <!-- <button id="6">Help Text</button>
+                <button id="6">Help Text</button>
                 <button id="7">Move</button>
                 <button id="8">Cutscene</button>
                 <button id="9">Scale</button>
                 <button id="10">Opacity</button>
                 <button id="11">Light</button>
-                <button id="13">Cam Offset</button> -->
+                <button id="13">Cam Offset</button>
             </div>
+			<p class="edit-subhead">Spawners</p>
+			<div id="spawn-div" class="exit-field" style="column-count: 2; column-gap: 0px;">
+				<button id="14">Enemy Spawner</button>
+			</div>
+            <p class="edit-subhead">Other</p>
+			<div id="other-div" class="exit-field" style="column-count: 2; column-gap: 0px;">
+				<button id="16">Grapple Point</button>
+			</div>
+            
         </div>
         <script src="setup.js"></script>
         <script src="helpfulFuncs.js"></script>

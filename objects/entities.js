@@ -54,17 +54,47 @@ class BasicBlock extends Entity {
         this.type = Object.keys(objectMap).find(key => objectMap[key] === BasicBlock);
 
         this.texture = helper.texture || -1;
+        this.rotation = helper.rotation || 0;
+        this.dynamic = helper.dynamic || false;
+        this.restitution = helper.restitution || 0;
+        this.density = helper.density || 1;
 
         this.alterableProperties = new AlterableProperties(this, [
             {
                 "span": "Texture",
                 "input": ["number", "texture"]
             },
+            {
+                "span": "Rotation",
+                "input": ["number", "rotation"]
+            },
+            {
+                "span": "Restitution",
+                "input": ["number", "restitution"]
+            },
+            {
+                "span": "Dynamic",
+                "input": ["checkbox", "dynamic"]
+            },
+            {
+                "span": "Density",
+                "input": ["number", "density"]
+            },
         ]);
     }
     render() {
+        let tx = this.x + this.w / 2;
+        let ty = this.y + this.h / 2;
+
+        ctx.save();
+
+        ctx.translate(tx, ty);
+        ctx.rotate(this.rotation);
+
         ctx.fillStyle = "green";
-        ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+
+        ctx.restore();
 
         this.renderHoverAndSelect();
     }
@@ -109,15 +139,23 @@ class Start extends Entity {
     }
 }
 
-class Crawler extends Entity {
+class SafeZone extends Entity {
     constructor(helper) {
         super(helper);
-        this.type = Object.keys(objectMap).find(key => objectMap[key] === Crawler);
+        this.type = Object.keys(objectMap).find(key => objectMap[key] === SafeZone);
     }
     render() {
-        ctx.fillStyle = "orange";
+        ctx.fillStyle = "rgba(40, 80, 40, 0.5)";
         ctx.fillRect(this.x, this.y, this.w, this.h);
 
+		if (!Keys.space) {
+			ctx.font = "25px 'Exo 2'"
+			ctx.fillStyle = "white";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+				ctx.fillText("Safe", this.x + this.w / 2, this.y + this.h / 2);
+		}
+		
         this.renderHoverAndSelect(0);
     }
 }
@@ -162,7 +200,42 @@ class HelpTextTrigger extends Entity {
             ctx.fillStyle = "white";
             ctx.textAlign = "center";
             ctx.textBaseline = "middle";
-                ctx.fillText("T", this.x + this.w / 2, this.y + this.h / 2);
+            ctx.fillText("Text", this.x + this.w / 2, this.y + this.h / 2);
+        }
+
+        this.renderHoverAndSelect();
+    }
+}
+
+class Light extends Entity {
+    constructor(helper) {
+        super(helper);
+        this.type = Object.keys(objectMap).find(key => objectMap[key] === Light);
+        
+        this.intensity = helper.intensity || 0;
+
+        this.alterableProperties = new AlterableProperties(this, [
+            {
+                "span": "intensity",
+                "input": ["number", "intensity"]
+            }
+        ]);
+    }
+    render() {
+        ctx.fillStyle = "white";
+        ctx.globalAlpha /= 1.5;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+        ctx.strokeStyle = "purple";
+        ctx.globalAlpha *= 1.5;
+        ctx.lineWidth = 5;
+        ctx.strokeRect(this.x, this.y, this.w, this.h);
+
+        if (!Keys.space) {
+            ctx.font = "25px 'Exo 2'"
+            ctx.fillStyle = "gold";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText("Light", this.x + this.w / 2, this.y + this.h / 2);
         }
 
         this.renderHoverAndSelect();
@@ -289,4 +362,164 @@ class CamOffsetTrigger extends Entity {
 
         this.renderHoverAndSelect();
     }
+}
+
+class EnemySpawner extends Entity {
+	constructor(helper) {
+		super(helper);
+		this.type = Object.keys(objectMap).find(key => objectMap[key] === EnemySpawner);
+		this.numGreys = helper.numGreys || 0;
+
+		this.alterableProperties = new AlterableProperties(this, [
+			{
+				"span": "Grey Enemies",
+				"input": ["number", "numGreys"]
+			}
+		]);
+	}
+	render() {
+		ctx.fillStyle = "grey";
+		ctx.globalAlpha /= 3;
+		ctx.fillRect(this.x, this.y, this.w, this.h);
+		ctx.strokeStyle = "purple";
+		ctx.globalAlpha *= 3;
+		ctx.lineWidth = 5;
+		ctx.strokeRect(this.x, this.y, this.w, this.h);
+
+		if (!Keys.space) {
+			ctx.font = "25px 'Exo 2'"
+			ctx.fillStyle = "white";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("Enemies", this.x + this.w / 2, this.y + this.h / 2);
+		}
+
+		this.renderHoverAndSelect();
+	}
+}
+
+class SwingingBlock extends Entity {
+	constructor(helper) {
+		super(helper);
+		this.type = Object.keys(objectMap).find(key => objectMap[key] === SwingingBlock);
+		this.anchorX = helper.anchorX || this.x + this.w / 2;
+		this.anchorY = helper.anchorY || this.y + this.h / 2;
+        this.arrowsMoveAnchor = false;
+        this.rotation = helper.rotation || 0;
+        this.density = helper.density || 1;
+        
+		this.alterableProperties = new AlterableProperties(this, [
+			{
+				"span": "Anchor X",
+				"input": ["number", "anchorX"]
+			},
+            {
+				"span": "Anchor Y",
+				"input": ["number", "anchorY"]
+			},
+            {
+				"span": "Move Anchor",
+				"input": ["checkbox", "arrowsMoveAnchor"]
+			},
+            {
+                "span": "Rotation",
+                "input": ["number", "rotation"]
+            },
+            {
+                "span": "Density",
+                "input": ["number", "density"]
+            },
+		]);
+	}
+	render() {
+        let anchorSize = 13;
+
+        let tx = this.x + this.w / 2;
+        let ty = this.y + this.h / 2;
+
+        ctx.save();
+
+        ctx.translate(tx, ty);
+        ctx.rotate(this.rotation);
+
+		ctx.fillStyle = "green";
+		ctx.globalAlpha /= 3;
+		ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+		ctx.strokeStyle = "purple";
+		ctx.globalAlpha *= 3;
+		ctx.lineWidth = 5;
+		ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+
+        ctx.restore();
+
+        ctx.fillStyle = "gold";
+        ctx.fillRect(this.anchorX - anchorSize, this.anchorY - anchorSize, anchorSize * 2, anchorSize * 2);
+        ctx.fillStyle = "white";
+        anchorSize = 10;
+        ctx.fillRect(this.anchorX - anchorSize, this.anchorY - anchorSize, anchorSize * 2, anchorSize * 2);
+
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(this.anchorX, this.anchorY);
+        ctx.lineTo(this.x + this.w / 2, this.y + this.h / 2);
+        ctx.stroke();
+        ctx.closePath();
+
+		if (!Keys.space) {
+			ctx.font = "25px 'Exo 2'"
+			ctx.fillStyle = "white";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("Swinging", this.x + this.w / 2, this.y + this.h / 2 - 25);
+		}
+
+		this.renderHoverAndSelect();
+	}
+}
+
+class GrapplePoint extends Entity {
+	constructor(helper) {
+		super(helper);
+		this.type = Object.keys(objectMap).find(key => objectMap[key] === GrapplePoint);
+		
+        this.radius = helper.radius || 4;
+
+		this.alterableProperties = new AlterableProperties(this, [
+			{
+				"span": "Radius",
+				"input": ["number", "radius"]
+			},
+		]);
+	}
+	render() {
+
+        ctx.beginPath();
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = "silver";
+        ctx.strokeStyle = "gold"
+        ctx.setLineDash([5, 15]);
+        ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.radius * 25, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
+        ctx.closePath();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "silver";
+        ctx.globalAlpha = 0.5;
+        ctx.fillRect(this.x, this.y, this.w, this.h);
+
+        ctx.globalAlpha = 1;
+
+		if (!Keys.space) {
+			ctx.font = "25px 'Exo 2'"
+			ctx.fillStyle = "white";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("Grapple", this.x + this.w / 2, this.y + this.h / 2 - 25);
+		}
+
+		this.renderHoverAndSelect();
+	}
 }

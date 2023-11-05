@@ -1,4 +1,4 @@
-var selectedObjectType = 2;
+var selectedObjectType = 3;
 var selectedObject = null;
 var fps = 60;
 let updateFps = 0;
@@ -11,6 +11,77 @@ function update() {
     let now = performance.now();
     let dt = now - then;
     then = now;
+
+    // moving selected objects
+    let objectSpeed = 0.015 * dt;
+    let rotationSpeed = 0.0025 * dt;
+    if (selectedObject) {
+        let obj = selectedObject[0];
+        
+        if (Keys.j && obj.rotation != null) {
+            obj.rotation += rotationSpeed;
+            obj.rotation = Math.round(obj.rotation * 1000) / 1000;
+        }
+        if (Keys.k && obj.rotation != null) {
+            obj.rotation -= rotationSpeed;
+            obj.rotation = Math.round(obj.rotation * 1000) / 1000;
+        }
+
+        let setAnchor = false;
+        if (obj.type == "15" && obj.arrowsMoveAnchor) {
+            setAnchor = true;
+        }
+
+        let newObjX = setAnchor ? obj.anchorX : obj.x;
+        let newObjY = setAnchor ? obj.anchorY : obj.y;
+
+        if (Keys.leftarrow) {
+            if (Keys.shift) {
+                newObjX = roundToGrid(newObjX - gridSize / 2);
+            }
+            else {
+                newObjX -= objectSpeed;
+            }
+        }
+        if (Keys.rightarrow) {
+            if (Keys.shift) {
+                if (newObjX != roundToGrid(newObjX - gridSize / 2)) {
+                    newObjX = roundToGrid(newObjX + gridSize - gridSize / 2);
+                }
+            }
+            else {
+                newObjX += objectSpeed;
+            }
+        }
+        if (Keys.uparrow) {
+            if (Keys.shift) {
+                newObjY = roundToGrid(newObjY - gridSize / 2);
+            }
+            else {
+                newObjY -= objectSpeed;
+            }
+        }
+        if (Keys.downarrow) {
+            if (Keys.shift) {
+                if (newObjY != roundToGrid(newObjY - gridSize / 2)) {
+                    newObjY = roundToGrid(newObjY + gridSize - gridSize / 2);
+                }
+            }
+            else {
+                newObjY += objectSpeed;
+            }
+        }
+
+        if (setAnchor) {
+            obj.anchorX = Math.round(newObjX * 1000) / 1000;
+            obj.anchorY = Math.round(newObjY * 1000) / 1000;
+        }
+        else {
+            obj.x = Math.round(newObjX * 1000) / 1000;
+            obj.y = Math.round(newObjY * 1000) / 1000;
+        }
+    }
+
 
     // Camera movement
     let cameraspeed = (Keys.shift == true ? 1.5 : 0.5) / camera.scale;

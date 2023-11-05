@@ -1,5 +1,6 @@
 // Some constants
-const gridSize = 25;
+const fixedGridSize = 25;
+let gridSize = fixedGridSize;
 const minRoomWidth = gridSize;
 const minRoomHeight = gridSize;
 
@@ -24,6 +25,7 @@ window.addEventListener('resize', function() {
 
 // Copy Map
 function copyToClipboard(text) {
+    console.log(text);
     var dummy = document.createElement("textarea");
 
     document.body.appendChild(dummy);
@@ -51,10 +53,12 @@ document.getElementById("resetCamera").onclick = () => {
 var toolsDiv = document.querySelector("body > div.tools-lay")
 let objDiv = document.getElementById("obj-div");
 let triggerDiv = document.getElementById("trig-div");
+let otherDiv = document.getElementById("other-div");
+let spawnDiv = document.getElementById("spawn-div");
 let selectDiv = document.getElementById("sel-div");
 let noSelectDiv = document.getElementById("nosel-div");
 
-let allDivChildren = Array.from(objDiv.children).concat(Array.from(triggerDiv.children));
+let allDivChildren = Array.from(objDiv.children).concat(Array.from(triggerDiv.children)).concat(Array.from(otherDiv.children)).concat(Array.from(spawnDiv.children));
 
 for(let i of allDivChildren) {    
     i.onclick = () => {
@@ -76,6 +80,12 @@ var Keys = {
     down: false,
     left: false,
     right: false,
+    uparrow: false,
+    downarrow: false,
+    leftarrow: false,
+    rightarrow: false,
+    j: false,
+    k: false,
     shift: false,
     space: false
 };
@@ -86,14 +96,40 @@ window.onkeydown = function(e) {
     if (importVisible) return;
     if (mouse.disabled) return;
 
-    if (c == "KeyW")
+    if (c == "KeyW") {
         Keys.up = true;
-    if (c == "KeyA")
+    }
+        if (c == "KeyA") {
         Keys.left = true;
-    if (c == "KeyD")
+    }
+    if (c == "KeyD") {
         Keys.right = true;
-    if (c == "KeyS")
+    }
+    if (c == "KeyS") {
         Keys.down = true;
+    }
+    if (c == "Equal") {
+        gridSize = 12.5
+    }
+    if (c == "Minus") {
+        gridSize = 25;
+    }
+    if (c == "KeyJ") {
+        Keys.j = true;
+    }
+    if (c == "KeyK") {
+        Keys.k = true;
+    }
+
+    if (c == "ArrowUp")
+        Keys.uparrow = true;
+    if (c == "ArrowLeft")
+        Keys.leftarrow = true;
+    if (c == "ArrowRight")
+        Keys.rightarrow = true;
+    if (c == "ArrowDown")
+        Keys.downarrow = true;
+
     if (k == "Shift")
         Keys.shift = true;
 
@@ -120,23 +156,6 @@ window.onkeydown = function(e) {
             selectedObject = null;
         }
     }    
-
-    // if (!isNaN(parseInt(k)) && k != 0) {
-    //     if (k > 4) return;
-        
-    //     selectedObjectType = k - 1;
-
-    //     let div = document.getElementById(selectedObjectType);
-        
-    //     if (div.classList["0"] != "selected") {
-    //         div.classList.toggle('selected')
-    //     }
-
-    //     for(let i of objDiv.children) {
-    //         if (i.id == div.id) continue;
-    //         i.classList.remove('selected');
-    //     }
-    // }
 
     if (c == "Enter") {
         copyMap();
@@ -173,41 +192,42 @@ function copyMap() {
             delete obj.selected;
             delete obj.alterableProperties;
             delete obj.justSelected;
+            delete obj.arrowsMoveAnchor;
         }
     }
 
-    // let str = "const gameMap = " + JSON.stringify(m, null, 1);
+    let str = JSON.stringify(m, null, 1);
     
-    // copyToClipboard(JSON.stringify(m.rooms, null, 1));
+    copyToClipboard(JSON.stringify(m.rooms, null, 1));
 
-    // let gameMap = str.slice(15);
-    // loadMap(gameMap);
+    let gameMap = str;
+    loadMap(gameMap);
 
-    let room = map.rooms[0];
-    let width = room.w / gridSize;
-    let height = room.h / gridSize;
-    let str = ``;//`${width} ${height}\n`;
+    // let room = map.rooms[0];
+    // let width = room.w / gridSize;
+    // let height = room.h / gridSize;
+    // let str = ``;//`${width} ${height}\n`;
 
     
-    for (let y = room.y; y < room.y + room.h; y += gridSize) {
-        for (let x = room.x; x < room.x + room.w; x += gridSize) {
-            let rect = {x: x, y: y, w: gridSize, h: gridSize};
+    // for (let y = room.y; y < room.y + room.h; y += gridSize) {
+    //     for (let x = room.x; x < room.x + room.w; x += gridSize) {
+    //         let rect = {x: x, y: y, w: gridSize, h: gridSize};
 
-            let entType = 0;
-            for (let i = 0; i < room.entities.length; i++) {
-                if (RectVsRect(rect, room.entities[i])) {
-                    entType = room.entities[i].type;
-                    break;
-                }
-            }
+    //         let entType = 0;
+    //         for (let i = 0; i < room.entities.length; i++) {
+    //             if (RectVsRect(rect, room.entities[i])) {
+    //                 entType = room.entities[i].type;
+    //                 break;
+    //             }
+    //         }
 
-            str += `${entType},`;
-        }
+    //         str += `${entType},`;
+    //     }
 
-        str += "\n";
-    }
+    //     str += "\n";
+    // }
 
-    copyToClipboard(str);
+    //copyToClipboard(str);
 }
 
 window.onkeyup = function(e) {
@@ -224,6 +244,22 @@ window.onkeyup = function(e) {
         Keys.down = false;
     if (k == "Shift")
         Keys.shift = false;
+
+    if (c == "KeyJ") {
+        Keys.j = false;
+    }
+    if (c == "KeyK") {
+        Keys.k = false;
+    }
+
+    if (c == "ArrowUp")
+        Keys.uparrow = false;
+    if (c == "ArrowLeft")
+        Keys.leftarrow = false;
+    if (c == "ArrowRight")
+        Keys.rightarrow = false;
+    if (c == "ArrowDown")
+        Keys.downarrow = false;
 }
 
 // Mouse

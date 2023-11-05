@@ -12,6 +12,10 @@ class Room {
         this.justSelected = 0;
 
         this.backgroundColor = helper.backgroundColor || "#000000";
+        this.camOffsetX = helper.camOffsetX || 0;
+        this.camOffsetY = helper.camOffsetY || 0;
+        this.camScale = helper.camScale || 1;
+        this.camScaleSpeed = helper.camScaleSpeed || 1;
 
         this.id = roomUniqueId;
         roomUniqueId++;
@@ -20,6 +24,22 @@ class Room {
             {
                 "span": "Background",
                 "input": ["color", "backgroundColor"]
+            },
+            {
+                "span": "Cam X Offset",
+                "input": ["number", "camOffsetX"]
+            },
+            {
+                "span": "Cam Y Offset",
+                "input": ["number", "camOffsetY"]
+            },
+            {
+                "span": "Cam Scale",
+                "input": ["number", "camScale"]
+            },
+            {
+                "span": "Cam Scale Speed",
+                "input": ["number", "camScaleSpeed"]
             }
         ]);
     }

@@ -37,9 +37,9 @@ class AlterableProperties {
                         } else if (extra == "number") {
                             let input = newNumberInput(parentDiv);
                             input.value = this.parent[targetProperty];
-    
+
                             input.oninput = () => {
-                                this.parent[targetProperty] = input.value;
+								this.parent[targetProperty] = Number(input.value);
                             }
                         } else if (extra == "text") {
                             let input = newTextInput(parentDiv);

@@ -1,15 +1,19 @@
 const objectMap = {
     0: Room,
-//    1: Start,
-    1: Spawn,
-    2: BasicBlock,
+    1: Start,
+    2: Spawn,
+    3: BasicBlock,
     4: Lava,
-    5: Crawler,
+    5: SafeZone,
     6: HelpTextTrigger,
     7: MoveTrigger,
     8: CutsceneTrigger,
+    11: Light,
     12: DarknessBlock,
-    13: CamOffsetTrigger
+    13: CamOffsetTrigger,
+	14: EnemySpawner,
+    15: SwingingBlock,
+    16: GrapplePoint
 }
 
 function loadMap(m) {
