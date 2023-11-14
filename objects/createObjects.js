@@ -23,7 +23,7 @@ function CreateObjects(helper) {
             break;
         }
         case 1:
-        case 2: case 16: {
+        case 2: case 11: case 16: {
             // 1: Start, 2: Spawn, 5: Crawler
             // One block big entities only
             helper.x = roundToGrid(mouse.x - gridSize / 2);
@@ -58,6 +58,8 @@ function CreateObjects(helper) {
                     selectedRoom.entities.push(new Spawn(helper));
                 } else if (selectedObjectType == 5) {
                     selectedRoom.entities.push(new Crawler(helper));
+                } else if (selectedObjectType == 11) {
+                    selectedRoom.entities.push(new Light(helper));
                 } else if (selectedObjectType == 16) {
 					selectedRoom.entities.push(new GrapplePoint(helper));
 				}
@@ -70,7 +72,6 @@ function CreateObjects(helper) {
 		case 5:
         case 6:
         case 8: 
-        case 11:
         case 12: 
         case 13:
 		case 14: case 15: {
@@ -141,9 +142,6 @@ function CreateObjects(helper) {
                 }
                 else if (selectedObjectType == 8) {
                     selectedRoom.entities.push(new CutsceneTrigger(helper));
-                }
-                else if (selectedObjectType == 11) {
-                    selectedRoom.entities.push(new Light(helper));
                 }
                 else if (selectedObjectType == 12) {
                     selectedRoom.entities.push(new DarknessBlock(helper));

@@ -168,7 +168,16 @@ function update() {
         ctx.shadowColor = helper.color;
         ctx.shadowBlur = helper.color == "green" ? 10 : 0;
         
-        ctx.lineWidth = 5;
+        if (gridSize == 25) {
+            ctx.lineWidth = 5;
+        }
+        else if (gridSize == 12.5) {
+            ctx.lineWidth = 3;
+        }
+        else if (gridSize == 6.25) {
+            ctx.lineWidth = 2;
+        }
+
         ctx.strokeRect(helper.x, helper.y, helper.w, helper.h);
         if (helper.color == "red") {
             ctx.globalAlpha = 0.5;
@@ -188,7 +197,15 @@ function update() {
     ctx.fillStyle = "gold";
     ctx.globalAlpha = 0.5;
     ctx.beginPath();
-    ctx.arc(mouse.x, mouse.y, 5, 0, Math.PI * 2);
+    let cursorSize = 5;
+    if (gridSize == 12.5) {
+        cursorSize = 3;
+    }
+    else if (gridSize == 6.25) {
+        cursorSize = 1;
+    }
+
+    ctx.arc(mouse.x, mouse.y, cursorSize, 0, Math.PI * 2);
     ctx.fill();
     ctx.closePath();
     ctx.globalAlpha = 1;

@@ -109,10 +109,20 @@ window.onkeydown = function(e) {
         Keys.down = true;
     }
     if (c == "Equal") {
-        gridSize = 12.5
+        if (gridSize == 25) {
+            gridSize = 12.5
+        }
+        else {
+            gridSize = 6.25;
+        }
     }
     if (c == "Minus") {
-        gridSize = 25;
+        if (gridSize == 6.25) {
+            gridSize = 12.5;
+        } 
+        else {
+            gridSize = 25;
+        }
     }
     if (c == "KeyJ") {
         Keys.j = true;

@@ -212,33 +212,48 @@ class Light extends Entity {
         super(helper);
         this.type = Object.keys(objectMap).find(key => objectMap[key] === Light);
         
-        this.intensity = helper.intensity || 0;
+        this.intensity = helper.intensity || 0.2;
+        this.radius = helper.radius || 5;
 
         this.alterableProperties = new AlterableProperties(this, [
             {
                 "span": "intensity",
                 "input": ["number", "intensity"]
+            },
+            {
+                "span": "radius",
+                "input": ["number", "radius"]
             }
         ]);
     }
     render() {
-        ctx.fillStyle = "white";
-        ctx.globalAlpha /= 1.5;
+        ctx.beginPath();
+        ctx.globalAlpha = 0.3;
+        ctx.fillStyle = "silver";
+        ctx.strokeStyle = "gold"
+        ctx.setLineDash([5, 15]);
+        ctx.arc(this.x + this.w / 2, this.y + this.h / 2, this.radius * 25, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.globalAlpha = 0.7;
+        ctx.stroke();
+        ctx.closePath();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "silver";
+        ctx.globalAlpha = 0.5;
         ctx.fillRect(this.x, this.y, this.w, this.h);
-        ctx.strokeStyle = "purple";
-        ctx.globalAlpha *= 1.5;
-        ctx.lineWidth = 5;
-        ctx.strokeRect(this.x, this.y, this.w, this.h);
 
-        if (!Keys.space) {
-            ctx.font = "25px 'Exo 2'"
-            ctx.fillStyle = "gold";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.fillText("Light", this.x + this.w / 2, this.y + this.h / 2);
-        }
+        ctx.globalAlpha = 1;
 
-        this.renderHoverAndSelect();
+		if (!Keys.space) {
+			ctx.font = "25px 'Exo 2'"
+			ctx.fillStyle = "white";
+			ctx.textAlign = "center";
+			ctx.textBaseline = "middle";
+			ctx.fillText("Light", this.x + this.w / 2, this.y + this.h / 2 - 25);
+		}
+
+		this.renderHoverAndSelect();
     }
 }
 
@@ -407,6 +422,7 @@ class SwingingBlock extends Entity {
         this.arrowsMoveAnchor = false;
         this.rotation = helper.rotation || 0;
         this.density = helper.density || 1;
+        this.lineWidth = helper.lineWidth || 6.0;
         
 		this.alterableProperties = new AlterableProperties(this, [
 			{
@@ -429,6 +445,10 @@ class SwingingBlock extends Entity {
                 "span": "Density",
                 "input": ["number", "density"]
             },
+            {
+                "span": "Line Width",
+                "input": ["number", "lineWidth"]
+            }
 		]);
 	}
 	render() {
@@ -447,7 +467,7 @@ class SwingingBlock extends Entity {
 		ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
 		ctx.strokeStyle = "purple";
 		ctx.globalAlpha *= 3;
-		ctx.lineWidth = 5;
+		ctx.lineWidth = this.lineWidth;
 		ctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
 
         ctx.restore();
@@ -493,7 +513,6 @@ class GrapplePoint extends Entity {
 		]);
 	}
 	render() {
-
         ctx.beginPath();
         ctx.globalAlpha = 0.3;
         ctx.fillStyle = "silver";
